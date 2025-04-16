@@ -53,7 +53,7 @@ class CVFormatter:
             if comps:
                 cv += f"\n**{categorie.capitalize()}**: \n"
                 competence = [
-                    f"- {comp['nom']}  {'- ' + comp['niveau'] if comp['niveau'] else ''}\n"
+                    f"- {comp['nom'].replace('_', ' ')}  {'- ' + comp['niveau'] if comp['niveau'] else ''}\n"
                     for comp in comps
                     ]
     
