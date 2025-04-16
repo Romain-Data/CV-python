@@ -1,6 +1,10 @@
 import pytest 
 from professionnel import Formation
 
+@pytest.fixture
+def formation_standard():
+    return Formation("Test diplôme", "Test école", 2025)
+
 def test_formation_init_tous_parametres():
     """Test d'initialisation avec tous les paramètres"""
     formation = Formation("Test diplôme", "Test école", 2025, "Test description")
@@ -11,14 +15,13 @@ def test_formation_init_tous_parametres():
     assert formation.description == "Test description"
 
 
-def test_formation_init_sans_description():
+def test_formation_init_sans_description(formation_standard):
     """Test d'initialisation sans description (paramètre optionnel)"""
-    formation = Formation("Test diplôme", "Test école", 2025)
     
-    assert formation.diplome == "Test diplôme"
-    assert formation.etablissement == "Test école"
-    assert formation.annee == "2025"
-    assert formation.description is None
+    assert formation_standard.diplome == "Test diplôme"
+    assert formation_standard.etablissement == "Test école"
+    assert formation_standard.annee == "2025"
+    assert formation_standard.description is None
 
 
 def test_formation_annee_conversion():

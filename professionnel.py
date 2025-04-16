@@ -45,13 +45,13 @@ class Projet:
 
 
 class Professionnel:
-    def __init__(self, nom:str, prenom:str, age:int, titre:str) -> None:
+    def __init__(self, nom:str, prenom:str, age:int, titre:str, email: str) -> None:
         self.nom = nom
         self.prenom = prenom
         self.age = age
         self.titre = titre
         self.experiences: List[Experience] = []
-        self.competences: Dict[str, List[Dict[str, str]]] = {
+        self.competences: Dict[str, List[Dict[str, Optional[str]]]] = {
             "techniques": [],
             "soft_skills": [],
             "langues": []
@@ -59,17 +59,17 @@ class Professionnel:
         self.formations: List[Formation] = []
         self.projets: List[Projet] = []
         self.certifications: List[Dict[str, str]] = []
-        self.contacts = {
-            "email": "",
-            "linkedin": "",
-            "github": ""
-        }
+        self.contacts: Dict[str, str] = {"email": email}
         self.disponibilite: bool = True
         self.passions: List[Dict[str, str|None]] = []
         self.score_apprentissage: float = 95  
 
+    def ajouter_contact(self, canal, contact):
+        self.contacts[canal] = contact
+        print(f"Votre contact {canal} a bien été ajouté")
 
-    def ajouter_une_experience(self, experience: Experience)-> None:
+
+    def ajouter_experience(self, experience: Experience)-> None:
         """
         Ajouter une expérience professionnelle
         """
@@ -93,7 +93,7 @@ class Professionnel:
             })
             print(f"Nouvelle compétence ajoutée : {competence}")
         else:
-            print(f"Catégorie {categorie} non reconnue")
+            raise ValueError(f"Catégorie {categorie} non reconnue")
         
 
     def ajouter_formation(self, formation: Formation) -> None:
@@ -129,25 +129,27 @@ class Professionnel:
         """
 
         efficacite = self.score_apprentissage / 100
-        temps_effectif = temps_apprentissage * efficacite
+        temps_effectif = round(temps_apprentissage * efficacite, 1)
 
         print(f"Apprentissage de {nouvelle_competence}...")
         print(f"Temps d'apprentissage estimé : {temps_effectif}h")
         self.ajouter_competence(nouvelle_competence)
 
         # Augmentation du score d'apprentissage avec l'expérience
-        self.score_apprentissage = min(100, self.score_apprentissage) + 0.5
+        self.score_apprentissage = min(100, self.score_apprentissage + 0.5)
         return f"✅ {nouvelle_competence} maitrisé en {temps_effectif}h !"
     
 
-    def contacter(self, canal: Literal['linkedin', 'email', 'github']) -> str:
+    def contacter(self, canal: str) -> str:
 
         """Obtenir les informations de contact"""
-        
-        try:
-            return f"Vous pouvez me contacter via {canal}: {self.contacts[canal]}"
-        except KeyError:
-            return f"Cette méthode n'est pas disponible. Je suis joignable par email: {self.contacts["email"]}"
+        if self.contacts["email"]:
+            try:
+                return f"Vous pouvez me contacter via {canal}: {self.contacts[canal]}"
+            except KeyError:
+                return f"Cette méthode n'est pas disponible. Je suis joignable par email: {self.contacts["email"]}"
+        else:
+            return "Je n'ai pas renseigné de coordonnées"
     
 
     def ajouter_projet(
@@ -159,7 +161,8 @@ class Professionnel:
         Ajouter le projet au portfolio
         """
         print(f"Collaboration initié sur le projet : {projet.nom}")
-        print(f"Équipe : {', '.join(projet.equipe)}" if projet.equipe else "")
+        if projet.equipe:
+            print(f"Équipe : {', '.join(projet.equipe)}")
         self.projets.append(projet)
         return(f"Projet {projet.nom} ajouté au portfolio")
 
