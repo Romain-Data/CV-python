@@ -243,3 +243,35 @@ def test_professionnel_str(professionnel_standard):
     chaine_attendue = f"{prenom} {nom}, {age} ans - {titre}"
 
     assert str(professionnel_standard) == chaine_attendue
+
+
+def test_professionnel_voir_cv(professionnel_standard, mocker):
+    """Test que voir_cv appelle bien CVFormatter.afficher()"""
+
+    mock_formatter = mocker.MagicMock()
+    mocker.patch('cv_formatter.CVFormatter', return_value=mock_formatter)
+
+    professionnel_standard.voir_cv()
+
+    mock_formatter.afficher.assert_called_once()
+
+
+def test_professionnel_sauvergarder_cv(professionnel_standard, mocker, tmp_path):
+    """Test que sauvegarder_cv() utilise CVFormatter et écrit dans un fichier"""
+
+    markdown_contenu = "# CV Contenu de test"
+
+    mock_formatter = mocker.MagicMock()
+    mock_formatter.generer_markdown.return_value = markdown_contenu
+
+    mocker.patch("cv_formatter.CVFormatter", return_value=mock_formatter)
+
+    test_file = tmp_path / "test_cv.md"
+
+    professionnel_standard.sauvegarder_cv(str(test_file))
+
+    # Vérifie que generer_markdown() a bien été appelé
+    mock_formatter.generer_markdown.assert_called_once()
+
+    assert test_file.exists()
+    assert test_file.read_text() == markdown_contenu

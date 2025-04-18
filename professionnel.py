@@ -173,11 +173,14 @@ class Professionnel:
         return f"Statut mis à jour : {status} pour de nouvelles opportunités"
     
 
-    def voir_cv(self) -> None:
-
-        """Générer un cv complet"""
+    def voir_cv(self, mode = 'auto') -> None:
+        """Générer un cv complet
+        mode :
+        - auto : affiche via IPython si dispo, sinon print
+        - texte : print brut
+        - jupyter : force IPython Markdown"""
         from cv_formatter import CVFormatter
-        CVFormatter(self).afficher()
+        CVFormatter(self).afficher(mode)
 
     
     def sauvegarder_cv(self, chemin: str = 'README.md') -> None:

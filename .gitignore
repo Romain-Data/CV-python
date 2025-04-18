@@ -1,1 +1,4 @@
-*pycache*
+__pycache__/
+*.py[cod]
+*$py.class
+tests/__pycache__/test_formation.cpython-312-pytest-8.3.4.pyc

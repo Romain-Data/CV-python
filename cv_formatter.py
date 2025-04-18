@@ -4,6 +4,8 @@ from typing import List
 
 class CVFormatter:
     def __init__(self, professionnel: Professionnel):
+        if not isinstance(professionnel, Professionnel):
+            raise TypeError("Le paramètre doit être une instance de Professionnel")
         self.pro = professionnel
 
 
