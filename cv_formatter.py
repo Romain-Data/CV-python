@@ -4,6 +4,8 @@ from typing import List
 
 class CVFormatter:
     def __init__(self, professionnel: Professionnel):
+        if not isinstance(professionnel, Professionnel):
+            raise TypeError("Le paramètre doit être une instance de Professionnel")
         self.pro = professionnel
 
 
@@ -53,7 +55,7 @@ class CVFormatter:
             if comps:
                 cv += f"\n**{categorie.capitalize()}**: \n"
                 competence = [
-                    f"- {comp['nom']}  {'- ' + comp['niveau'] if comp['niveau'] else ''}\n"
+                    f"- {comp['nom'].replace('_', ' ')}  {'- ' + comp['niveau'] if comp['niveau'] else ''}\n"
                     for comp in comps
                     ]
     
