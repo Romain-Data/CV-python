@@ -116,13 +116,14 @@ def test_cvformatter_afficher_sans_ipython(formatter_minimal, monkeypatch, capsy
     assert "## titre" in capture.out
 
 
-def test_cvformatter_afficher_avec_ipython(formatter_minimal, monkeypatch):
+def test_cvformatter_afficher_avec_ipython(formatter_minimal, monkeypatch, mocker):
     """Test le fonctionnement de afficher() avec la présence de IPython"""
 
-    mock_display = mock.MagicMock()
-    mock_markdown = mock.MagicMock()
+    # Crée un mock pour IPython et ses fonctions
+    mock_display = mocker.MagicMock()
+    mock_markdown = mocker.MagicMock()
 
-    mock_ipython_display = mock.MagicMock()
+    mock_ipython_display = mocker.MagicMock()
     mock_ipython_display.display = mock_display
     mock_ipython_display.Markdown = mock_markdown
 
@@ -136,7 +137,8 @@ def test_cvformatter_afficher_avec_ipython(formatter_minimal, monkeypatch):
     
     formatter_minimal.afficher('jupyter')
 
-    capture = capsys.readouterr()
+    mock_markdown.assert_called_once()
 
-    assert "# prenom nom" in capture.out
-    assert "## titre" in capture.out
+    mock_content = mock_markdown.call_args[0][0]
+    assert "# prenom nom" in mock_content
+    mock_display.assert_called_once_with(mock_markdown.return_value)
