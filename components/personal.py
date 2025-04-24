@@ -1,4 +1,4 @@
-import streamlit as st
+import streamlit as st #type: ignore
 from components.utils import validate_filed
 from professionnel import Professionnel
 
@@ -8,10 +8,10 @@ def informations_personnelles():
     col1, col2 = st.columns(2)
 
     with col1:
-        nom = st.text_input("Nom", key="nom")
+        prenom = st.text_input("Prenom", key="prenom")
 
     with col2:
-        prenom = st.text_input("Prenom", key="prenom")
+        nom = st.text_input("Nom", key="nom")
 
     col1, col2 = st.columns([2,1])
 

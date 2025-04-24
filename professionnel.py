@@ -173,14 +173,27 @@ class Professionnel:
         return f"Statut mis à jour : {status} pour de nouvelles opportunités"
     
 
-    def voir_cv(self, mode = 'auto') -> None:
+    def voir_cv(self, mode = 'auto', return_content=False) -> None:
         """Générer un cv complet
         mode :
         - auto : affiche via IPython si dispo, sinon print
         - texte : print brut
-        - jupyter : force IPython Markdown"""
+        - jupyter : force IPython Markdown
+        Args:
+            mode (str): Mode d'affichage
+            return_content (bool): Si True, retourne le contenu au lieu de l'afficher
+        
+        Returns:
+            str or None: Le contenu du CV si return_content=True, sinon None
+        """
         from cv_formatter import CVFormatter
-        CVFormatter(self).afficher(mode)
+        formatter = CVFormatter(self)
+
+        if return_content:
+            return formatter.generer_markdown()
+        else:
+            formatter.afficher(mode)
+            return None
 
     
     def sauvegarder_cv(self, chemin: str = 'README.md') -> None:

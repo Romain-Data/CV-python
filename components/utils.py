@@ -34,8 +34,21 @@ def validate_filed(field_key, pattern, error_message):
     return is_valid
 
 
-def reset_form_fields(prefix):
-    """Réinitialise les champs de formulaire avec un préfixe commun"""
-    for key in list(st.session_state.keys()):
-        if key.startswith(prefix):
-            st.session_state[key] = ""
+# Pour réinitilier les formulaires à chaque soumission
+# On crée un nouveau formulaire  après un st.rerun()
+# Cette solution n'est pas élégante en terme de conception
+# Mais est plus intuitive côté utilisateur
+
+def get_form_id(form_type):
+    counter_key = f"{form_type}_counter"
+    if counter_key not in st.session_state:
+        st.session_state[counter_key] = 0
+    
+    form_id = st.session_state[counter_key]
+    return f"{form_type}_{form_id}"
+
+
+def increment_form_counter(form_type):
+    counter_key = f"{form_type}_counter"
+    if counter_key in st.session_state:
+        st.session_state[counter_key] += 1

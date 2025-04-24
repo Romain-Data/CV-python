@@ -1,5 +1,5 @@
 from cv_formatter import CVFormatter
-import pytest
+import pytest #type: ignore
 from professionnel import Experience, Formation, Professionnel, Projet
 
 

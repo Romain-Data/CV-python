@@ -1,51 +1,10 @@
-<<<<<<< Updated upstream
-
-from cv_formatter import CVFormatter
-from professionnel import Experience, Formation, Projet, Professionnel
-import streamlit as st
-
-ss = st.session_state
-
-# Initialisation du session state
-if "professionnel" not in ss:
-    ss.professionnel = Professionnel("","",0,"","")
-    ss.experiences = []
-    ss.formations = []
-    ss.projets = []
-    ss.competences = []
-
-# Main
-st.title("Créateur de CV")
-st.subheader("Créer rapidement votre CV au format Markdown")
-
-with st.form(
-        "Info_base",
-        clear_on_submit= False,
-        enter_to_submit = True,
-        border = True):
-    st.markdown("**Votre identité**")
-        
-    col_1, col_2 = st.columns(2)
-
-    with col_1 :
-        name = st.text_input("Nom", "Dujardin")
-        titre = st.text_input("Métier")
-
-    with col_2:
-        prenom = st.text_input("Prénom", "Jean")
-        age = st.number_input("Âge", step=1)
-    
-
-
-    valider = st.form_submit_button("Valider")
-    if valider:
-        st.write('Données envoyées')
-=======
 from cv_formatter import CVFormatter
 from professionnel import Professionnel
-from components.formations import gestion_formations
+from components.competences import gestion_competences
 from components.experiences import gestion_experiences
+from components.formations import gestion_formations
 from components.personal import informations_personnelles
+from components.projets import gestion_projets
 from components.utils import initialiser_session
 import streamlit as st # type: ignore
 
@@ -63,15 +22,22 @@ def main():
     informations_personnelles()
 
     if ss.professionnel:
-        tab1, tab2, tab3 = st.tabs(["Formations", "Expériences", "Projets"])
+        tab1, tab2, tab3, tab4 = st.tabs(["Compétences", "Formations", "Expériences", "Projets"])
 
         with tab1:
-            gestion_formations()
+            gestion_competences()
         
         with tab2:
+            gestion_formations()
+
+        with tab3:
             gestion_experiences()
+            
+        with tab4:
+            gestion_projets()
 
 if __name__=="__main__":
     main()
     st.write(ss)
->>>>>>> Stashed changes
+
+    st.write(ss.professionnel.voir_cv(return_content=True))
