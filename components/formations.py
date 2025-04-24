@@ -20,7 +20,7 @@ def gestion_formations():
         with col2:
             annee = st.number_input("Année d'obtention", min_value=1950, max_value=2025, value = 2025, step=1)
 
-        description = st.text_area("Desciption (optionnelle)", key="form_formation_description_formation")
+        description = st.text_area("Desciption (optionnelle)", key="form_formation_description")
         submit = st.form_submit_button("Ajouter cette formation")
 
         if submit:

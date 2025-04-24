@@ -1,5 +1,4 @@
 import streamlit as st #type:ignore
-import time
 
 ss = st.session_state
 
